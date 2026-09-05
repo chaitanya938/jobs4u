@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import nodemailer from "nodemailer";
+import { cookies } from "next/headers";
 import { otpStore } from "@/lib/otp-store";
 
 const ADMIN_EMAIL = "jobs4uwebsite@gmail.com";
@@ -21,17 +21,14 @@ export async function POST(request: NextRequest) {
         }
 
         // Render Free Tier explicitly blocks outbound SMTP ports to prevent spam.
-        // We bypass the email phase and instantly log the admin in explicitly.
-        const response = NextResponse.json({ success: true, redirect: true });
-        response.cookies.set("admin_session", "jobs4u_admin_secret_2024", {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
+        // In Next.js 15+ cookies() must be awaited
+        const cookieStore = await cookies();
+        cookieStore.set("admin_session", "jobs4u_admin_secret_2024", {
             maxAge: 60 * 60 * 8, // 8 hours
             path: "/",
         });
 
-        return response;
+        return NextResponse.json({ success: true, redirect: true });
     } catch (error: any) {
         console.error("Login error:", error);
         return NextResponse.json(
