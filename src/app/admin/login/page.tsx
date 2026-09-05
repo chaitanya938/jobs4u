@@ -44,6 +44,8 @@ function AdminLoginForm() {
 
             if (!res.ok) {
                 setError(data.error || "Something went wrong.");
+            } else if (data.redirect) {
+                router.push(from);
             } else {
                 setStep("otp");
                 setCountdown(30);
