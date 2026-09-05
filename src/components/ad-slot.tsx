@@ -4,7 +4,7 @@ type AdSlotProps = {
     className?: string;
 };
 
-function AdSlot() {
+function AdSlot(_props: AdSlotProps) {
     return null;
 }
 
