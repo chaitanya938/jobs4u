@@ -25,7 +25,9 @@ export async function POST(request: NextRequest) {
         otpStore[ADMIN_EMAIL] = { otp, expires };
 
         const transporter = nodemailer.createTransport({
-            service: "gmail",
+            host: "smtp.gmail.com",
+            port: 465,
+            secure: true,
             auth: {
                 user: process.env.SMTP_USER,
                 pass: process.env.SMTP_PASS,
