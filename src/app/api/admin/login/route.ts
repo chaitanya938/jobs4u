@@ -51,10 +51,10 @@ export async function POST(request: NextRequest) {
         });
 
         return NextResponse.json({ success: true, message: "OTP sent to your email." });
-    } catch (error) {
+    } catch (error: any) {
         console.error("Login error:", error);
         return NextResponse.json(
-            { error: "Failed to send OTP. Please check SMTP configuration." },
+            { error: `SMTP Error: ${error?.message || "Unknown error"}` },
             { status: 500 }
         );
     }
