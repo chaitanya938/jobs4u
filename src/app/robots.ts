@@ -8,6 +8,6 @@ export default function robots(): MetadataRoute.Robots {
                 allow: "/",
             },
         ],
-        sitemap: "https://jobs4u.in/sitemap.xml",
+        sitemap: "https://jobs4uu.in/sitemap.xml",
     };
 }

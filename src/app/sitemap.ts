@@ -1,17 +1,17 @@
 import type { MetadataRoute } from "next";
-import { companies, hiringProcesses, interviewExperiences, jobs, preparationGuides, programmingQuestions, referralOpportunities, resumeResources } from "@/lib/site-data";
+import { fetchActiveJobs } from "@/lib/jobs-store";
+import { interviewExperiences, programmingQuestions, referralOpportunities, resumeResources } from "@/lib/site-data";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+const siteUrl = "https://jobs4uu.in";
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const staticRoutes = [
-        "",
         "/fresher-jobs",
         "/remote-jobs",
         "/experienced-jobs",
         "/resume",
         "/referrals",
         "/interview",
-        "/preparation",
-        "/hiring-process",
         "/about",
         "/contact",
         "/privacy-policy",
@@ -21,18 +21,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
         "/report",
     ];
 
-    const entries: MetadataRoute.Sitemap = staticRoutes.map((path) => ({ url: `https://jobs4u.in${path}`, lastModified: new Date(), changeFrequency: "weekly", priority: path === "" ? 1 : 0.7 }));
+    const entries: MetadataRoute.Sitemap = staticRoutes.map((path) => ({
+        url: `${siteUrl}${path}`,
+        changeFrequency: "weekly",
+        priority: 0.7,
+    }));
+
+    const jobs = await fetchActiveJobs();
 
     const dynamic = [
-        ...jobs.map((item) => `/jobs/${item.slug}`),
-        ...resumeResources.map((item) => `/resume/${item.slug}`),
-        ...referralOpportunities.map((item) => `/referrals/${item.slug}`),
-        ...interviewExperiences.map((item) => `/interview/${item.slug}`),
-        ...programmingQuestions.map((item) => `/questions/${item.slug}`),
-        ...preparationGuides.map((item) => `/preparation/${item.slug}`),
-        ...hiringProcesses.map((item) => `/hiring-process/${item.slug}`),
-        ...companies.map((item) => `/hiring-process/${item.slug}`),
-    ].map((path) => ({ url: `https://jobs4u.in${path}`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.7 }));
+        ...jobs.map((item) => ({ path: `/jobs/${item.slug}`, lastModified: item.postedAt })),
+        ...resumeResources.map((item) => ({ path: `/resume/${item.slug}`, lastModified: item.updatedAt })),
+        ...referralOpportunities.map((item) => ({ path: `/referrals/${item.slug}`, lastModified: item.postedAt })),
+        ...interviewExperiences.map((item) => ({ path: `/interview/${item.slug}`, lastModified: item.updatedAt })),
+        ...programmingQuestions.map((item) => ({ path: `/questions/${item.slug}`, lastModified: undefined })),
+    ].map(({ path, lastModified }) => ({
+        url: `${siteUrl}${path}`,
+        ...(lastModified ? { lastModified } : {}),
+        changeFrequency: "weekly" as const,
+        priority: 0.7,
+    }));
 
     return [...entries, ...dynamic];
 }
