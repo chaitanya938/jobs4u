@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { IBM_Plex_Mono, IBM_Plex_Sans, Space_Grotesk } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
+import { GoogleAnalytics } from "@/components/google-analytics";
 import { SiteFooter, SiteHeader } from "@/components/site-shell";
 
 const bodyFont = IBM_Plex_Sans({
@@ -64,12 +65,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'G-370G928EW8', {
-              page_path: window.location.pathname,
+              send_page_view: false,
             });
           `}
         </Script>
       </head>
       <body className="min-h-full bg-white text-black">
+        <GoogleAnalytics />
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-slate-950 focus:px-4 focus:py-2 focus:text-sm focus:text-white"
