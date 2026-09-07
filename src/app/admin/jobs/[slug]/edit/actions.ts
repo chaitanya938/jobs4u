@@ -1,6 +1,6 @@
 "use server";
 
-import { updateJob, type JobCategoryTab } from "@/lib/jobs-store";
+import { updateJob, type JobCategoryTab, uploadCompanyLogo } from "@/lib/jobs-store";
 import { revalidatePath } from "next/cache";
 
 function splitLines(value: string) {
@@ -15,18 +15,7 @@ export async function updateJobAction(slug: string, formData: FormData, categori
     const file = formData.get("companyLogo") as File | null;
 
     if (file && file.size > 0 && file.name) {
-        const fs = require("fs");
-        const path = require("path");
-        const bytes = await file.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-        const ext = file.name.split('.').pop() || 'png';
-        const filename = `logo-${Date.now()}.${ext}`;
-        const dir = path.join(process.cwd(), "public", "uploads");
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
-        }
-        fs.writeFileSync(path.join(dir, filename), buffer);
-        logoUrl = `/uploads/${filename}`;
+        logoUrl = await uploadCompanyLogo(file);
     } else {
         const urlStr = formData.get("companyLogoUrl")?.toString().trim();
         if (urlStr) logoUrl = urlStr;

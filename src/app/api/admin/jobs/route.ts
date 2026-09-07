@@ -1,7 +1,5 @@
-import fs from "fs";
-import path from "path";
 import { NextResponse } from "next/server";
-import { saveJob, type JobCategoryTab } from "@/lib/jobs-store";
+import { saveJob, type JobCategoryTab, uploadCompanyLogo } from "@/lib/jobs-store";
 
 const allowedTabs: JobCategoryTab[] = ["Fresher", "Experienced", "Remote"];
 
@@ -37,16 +35,7 @@ export async function POST(request: Request) {
         let logoUrl = undefined;
         const file = payload.get("companyLogo") as File | null;
         if (file && file.size > 0 && file.name) {
-            const bytes = await file.arrayBuffer();
-            const buffer = Buffer.from(bytes);
-            const ext = file.name.split('.').pop() || 'png';
-            const filename = `logo-${Date.now()}.${ext}`;
-            const dir = path.join(process.cwd(), "public", "uploads");
-            if (!fs.existsSync(dir)) {
-                fs.mkdirSync(dir, { recursive: true });
-            }
-            fs.writeFileSync(path.join(dir, filename), buffer);
-            logoUrl = `/uploads/${filename}`;
+            logoUrl = await uploadCompanyLogo(file);
         } else {
             const textLogo = payload.get("companyLogoUrl")?.toString().trim();
             if (textLogo) logoUrl = textLogo;

@@ -113,6 +113,30 @@ export type JobCreateInput = {
     postedAt?: string;
 };
 
+const companyLogoBucket = "job-logos";
+
+export async function uploadCompanyLogo(file: File) {
+    const supabase = getSupabaseAdmin();
+    const extension = file.name.split(".").pop()?.toLowerCase() || "png";
+    const filePath = `${randomUUID()}.${extension}`;
+    const buffer = Buffer.from(await file.arrayBuffer());
+
+    const { error: bucketError } = await supabase.storage.createBucket(companyLogoBucket, { public: true });
+    if (bucketError && !bucketError.message.toLowerCase().includes("already exists")) {
+        throw new Error(bucketError.message);
+    }
+
+    const { error: uploadError } = await supabase.storage
+        .from(companyLogoBucket)
+        .upload(filePath, buffer, { contentType: file.type || "image/png", upsert: false });
+
+    if (uploadError) {
+        throw new Error(uploadError.message);
+    }
+
+    return supabase.storage.from(companyLogoBucket).getPublicUrl(filePath).data.publicUrl;
+}
+
 function normalizeLines(value: unknown) {
     if (Array.isArray(value)) {
         return value.map((item) => String(item).trim()).filter(Boolean);
@@ -279,9 +303,33 @@ export async function deleteJob(slug: string) {
 
 export async function updateJob(slug: string, input: JobCreateInput) {
     const supabase = getSupabaseAdmin() as unknown as AdminSupabaseClient;
+    const company = splitCompanyName(input.company);
+    let companyId: string | undefined;
+
+    if (input.companyLogo) {
+        const companyPayload = {
+            slug: company.slug,
+            name: company.name,
+            sector: "Career",
+            description: `${company.name} hiring opportunities on Jobs4U`,
+            logo_url: input.companyLogo,
+        };
+        const { data: companyRow, error: companyError } = await supabase
+            .from("companies")
+            .upsert(companyPayload, { onConflict: "slug" })
+            .select("id")
+            .single();
+
+        if (companyError) {
+            throw new Error(companyError.message);
+        }
+
+        companyId = companyRow?.id;
+    }
 
     // For simplicity just update the jobs table.
     const { error } = await supabase.from("jobs").update({
+        ...(companyId ? { company_id: companyId } : {}),
         title: input.title.trim(),
         location: input.location.trim(),
         experience: input.experience.trim(),
