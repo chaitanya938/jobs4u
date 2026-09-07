@@ -30,13 +30,13 @@ export const metadata: Metadata = {
   },
   description:
     "Jobs4U is a fast Indian career platform for latest jobs, fresher opportunities, referrals, interview experiences, preparation guides and resume resources.",
-  metadataBase: new URL("https://jobs4u.in"),
+  metadataBase: new URL("https://jobs4uu.in"),
   alternates: { canonical: "/" },
   openGraph: {
     title: "Jobs4U",
     description:
       "Find genuine jobs, referrals, interview content and preparation guides on Jobs4U.",
-    url: "https://jobs4u.in",
+    url: "https://jobs4uu.in",
     siteName: "Jobs4U",
     type: "website",
   },

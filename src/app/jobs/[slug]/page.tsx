@@ -45,7 +45,7 @@ export default async function JobDetailPage({ params }: { params: Promise<{ slug
     const latestQuestions = programmingQuestions.slice(0, 3);
     const latestResumeResources = resumeResources.slice(0, 3);
     const isExpired = status === "EXPIRED";
-    const canonicalUrl = `https://jobs4u.in/jobs/${job.slug}`;
+    const canonicalUrl = `https://jobs4uu.in/jobs/${job.slug}`;
 
     const schema = isExpired
         ? null

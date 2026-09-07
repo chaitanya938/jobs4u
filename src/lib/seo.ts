@@ -20,7 +20,7 @@ export function createPageMetadata({
         openGraph: {
             title,
             description,
-            url: `https://jobs4u.in${path}`,
+            url: `https://jobs4uu.in${path}`,
             siteName: "Jobs4U",
             type: "website",
             images: [image],
