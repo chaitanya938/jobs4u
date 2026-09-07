@@ -32,7 +32,7 @@ type JobInsert = {
     application_url: string;
     source_url?: string | null;
     posted_at: string;
-    expires_at: string;
+    expires_at?: string | null;
     status: "ACTIVE" | "EXPIRED";
     categories?: string[];
 };
@@ -76,7 +76,7 @@ type JobRow = {
     application_url: string;
     source_url: string | null;
     posted_at: string;
-    expires_at: string;
+    expires_at: string | null;
     status: "ACTIVE" | "EXPIRED";
     categories: string[] | null;
     company:
@@ -179,9 +179,8 @@ export async function fetchJobs() {
 
 export async function fetchActiveJobs() {
     const jobs = await fetchJobs();
-    const now = Date.now();
 
-    return jobs.filter((job) => job.status === "ACTIVE" && new Date(job.expiresAt).getTime() >= now);
+    return jobs.filter((job) => job.status === "ACTIVE");
 }
 
 export async function fetchJobBySlug(slug: string) {
@@ -213,8 +212,6 @@ export async function saveJob(input: JobCreateInput) {
     const supabase = getSupabaseAdmin() as unknown as AdminSupabaseClient;
     const company = splitCompanyName(input.company);
     const postedAt = input.postedAt ? new Date(input.postedAt) : new Date();
-    const expiresAt = new Date(postedAt);
-    expiresAt.setDate(expiresAt.getDate() + 3);
 
     const companyPayload = {
         slug: company.slug,
@@ -239,8 +236,6 @@ export async function saveJob(input: JobCreateInput) {
     }
 
     const slug = `${slugify(input.title)}-${slugify(company.name)}-${slugify(input.location)}-${randomUUID().slice(0, 8)}`;
-    const status = expiresAt.getTime() < Date.now() ? "EXPIRED" : "ACTIVE";
-
     const { error: jobError } = await supabase.from("jobs").insert({
         slug,
         title: input.title.trim(),
@@ -258,8 +253,8 @@ export async function saveJob(input: JobCreateInput) {
         application_url: input.applicationUrl.trim(),
         source_url: input.sourceUrl?.trim() || input.applicationUrl.trim(),
         posted_at: postedAt.toISOString(),
-        expires_at: expiresAt.toISOString(),
-        status,
+        expires_at: null,
+        status: "ACTIVE",
         categories: input.categories,
     });
 

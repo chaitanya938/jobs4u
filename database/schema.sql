@@ -30,7 +30,7 @@ create table if not exists jobs (
   application_url text not null,
   source_url text,
   posted_at timestamptz not null,
-  expires_at timestamptz not null,
+  expires_at timestamptz,
   status text not null check (status in ('ACTIVE', 'EXPIRED')),
   categories text[] not null default '{}'::text[],
   created_at timestamptz not null default now(),

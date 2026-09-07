@@ -55,7 +55,6 @@ export default async function JobDetailPage({ params }: { params: Promise<{ slug
             title: job.title,
             description: job.description,
             datePosted: job.postedAt,
-            validThrough: job.expiresAt,
             employmentType: job.jobType,
             hiringOrganization: {
                 "@type": "Organization",

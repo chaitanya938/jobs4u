@@ -28,7 +28,7 @@ export type Job = {
     applicationUrl: string;
     sourceUrl: string;
     postedAt: string;
-    expiresAt: string;
+    expiresAt: string | null;
     status: JobStatus;
     categories: string[];
     tags: string[];
@@ -273,7 +273,8 @@ export function formatDate(value: string) {
 }
 
 export function isJobActive(job: Job, now = new Date()) {
-    return job.status === "ACTIVE" && new Date(job.expiresAt).getTime() >= now.getTime();
+    void now;
+    return job.status === "ACTIVE";
 }
 
 export function getJobStatus(job: Job, now = new Date()): JobStatus {
