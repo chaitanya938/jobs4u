@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 
 function splitLines(value: string) {
     return value
-        .split(/\n|,/)
+    .split(/\r?\n/)
         .map((item) => item.trim())
         .filter(Boolean);
 }
