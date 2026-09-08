@@ -91,8 +91,8 @@ export function JobCard({ job, showReferralBanner }: { job: Job; showReferralBan
 
                 {/* Skills */}
                 <div className="mt-2 flex flex-wrap gap-1.5">
-                    {job.skills.slice(0, 5).map((skill) => (
-                        <span key={skill} className="rounded-full bg-orange-50 border border-orange-200 px-2.5 py-0.5 text-xs font-medium text-orange-700 break-words max-w-full truncate">{skill}</span>
+                    {job.skills.flatMap((skill) => skill.split(",").map((item) => item.trim()).filter(Boolean)).slice(0, 5).map((skill, index) => (
+                        <span key={`${skill}-${index}`} className="rounded-full bg-orange-50 border border-orange-200 px-2.5 py-0.5 text-xs font-medium text-orange-700 break-words max-w-full truncate">{skill}</span>
                     ))}
                 </div>
 
