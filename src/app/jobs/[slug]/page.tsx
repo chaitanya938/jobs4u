@@ -136,7 +136,7 @@ export default async function JobDetailPage({ params }: { params: Promise<{ slug
                             <AdSlotInContent />
                             <ContentBlock title="Requirements" items={job.requirements} />
                             <AdSlotInContent />
-                            <ContentBlock title="Skills" items={job.skills} pills />
+                            <ContentBlock title="Skills" items={job.skills.flatMap((skill) => skill.split(",").map((item) => item.trim()).filter(Boolean))} pills />
                             <AdSlotInContent />
                             <ContentBlock title="Eligibility" items={job.eligibility} />
                             <section className="py-6 border-b border-black">
