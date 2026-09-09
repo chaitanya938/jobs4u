@@ -97,7 +97,7 @@ export function JobCard({ job, showReferralBanner }: { job: Job; showReferralBan
                 </div>
 
                 {/* Description */}
-                <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600 break-words">{job.description}</p>
+                <p className="mt-2 line-clamp-2 whitespace-pre-line text-sm leading-6 text-slate-600 break-words">{job.description}</p>
 
                 {/* Bottom row */}
                 <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-[10px] sm:text-xs">

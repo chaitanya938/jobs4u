@@ -235,7 +235,7 @@ function splitCompanyName(company: string) {
 export async function saveJob(input: JobCreateInput) {
     const supabase = getSupabaseAdmin() as unknown as AdminSupabaseClient;
     const company = splitCompanyName(input.company);
-    const postedAt = input.postedAt ? new Date(input.postedAt) : new Date();
+    const postedAt = parsePostedAt(input.postedAt);
 
     const companyPayload = {
         slug: company.slug,
@@ -343,12 +343,24 @@ export async function updateJob(slug: string, input: JobCreateInput) {
         eligibility: input.eligibility,
         application_url: input.applicationUrl.trim(),
         source_url: input.sourceUrl?.trim() || input.applicationUrl.trim(),
+        ...(input.postedAt?.trim() ? { posted_at: parsePostedAt(input.postedAt).toISOString() } : {}),
         categories: input.categories,
     }).eq("slug", slug);
 
     if (error) {
         throw new Error(error.message);
     }
+}
+
+function parsePostedAt(value?: string) {
+    if (!value?.trim()) return new Date();
+
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) {
+        throw new Error("Enter a valid posted date.");
+    }
+
+    return parsed;
 }
 
 export async function removeJobCategory(slug: string, category: string) {

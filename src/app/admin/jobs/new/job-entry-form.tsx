@@ -80,7 +80,7 @@ export function JobEntryForm() {
                 <Field name="workMode" label="Work mode" placeholder="Remote / On-site / Hybrid" />
                 <SelectField name="jobType" label="Job type" defaultValue={defaultJobType} />
                 <Field name="careerUrl" label="Career / job link" placeholder="https://careers.company.com/job/..." />
-                <Field name="postedAt" label="Posted date" placeholder="2026-09-01" />
+                <DateField name="postedAt" label="Posted date" />
             </section>
 
             <section className="grid gap-4">
@@ -121,6 +121,20 @@ function Field({ name, label, placeholder }: { name: string; label: string; plac
                 name={name}
                 placeholder={placeholder}
                 className="w-full min-w-0 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none placeholder:text-slate-400 focus:border-teal-400"
+            />
+        </label>
+    );
+}
+
+function DateField({ name, label, defaultValue }: { name: string; label: string; defaultValue?: string }) {
+    return (
+        <label className="grid gap-2 text-sm font-medium text-slate-700">
+            <span>{label}</span>
+            <input
+                type="date"
+                name={name}
+                defaultValue={defaultValue}
+                className="w-full min-w-0 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none focus:border-teal-400"
             />
         </label>
     );

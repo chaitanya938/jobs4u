@@ -103,7 +103,7 @@ export default async function JobDetailPage({ params }: { params: Promise<{ slug
                         <div className="min-w-0 flex-1">
                             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">{company?.name ?? job.companySlug}</p>
                             <h1 className="jobs4u-heading mt-2 text-4xl font-bold text-black sm:text-5xl break-words">{job.title}</h1>
-                            <p className="mt-4 text-base leading-8 text-black break-words">{job.description}</p>
+                            <p className="mt-4 whitespace-pre-line text-base leading-8 text-black break-words">{job.description}</p>
                         </div>
                     </div>
 

@@ -68,7 +68,7 @@ export function EditJobForm({ job }: { job: Job }) {
                 <Field name="workMode" label="Work mode" defaultValue={job.workMode} placeholder="Remote / On-site / Hybrid" />
                 <SelectField name="jobType" label="Job type" defaultValue={job.jobType || defaultJobType} />
                 <Field name="careerUrl" label="Career / job link" defaultValue={job.applicationUrl} placeholder="https://careers.company.com/job/..." />
-                <Field name="postedAt" label="Posted date" defaultValue={job.postedAt} placeholder="2026-09-01" />
+                <DateField name="postedAt" label="Posted date" defaultValue={toDateInputValue(job.postedAt)} />
             </section>
 
             <section className="grid gap-4">
@@ -99,6 +99,24 @@ function Field({ name, label, placeholder, defaultValue }: { name: string; label
                 defaultValue={defaultValue}
                 placeholder={placeholder}
                 className="w-full min-w-0 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none placeholder:text-slate-400 focus:border-teal-400"
+            />
+        </label>
+    );
+}
+
+function toDateInputValue(value: string) {
+    return value.match(/^\d{4}-\d{2}-\d{2}/)?.[0] ?? "";
+}
+
+function DateField({ name, label, defaultValue }: { name: string; label: string; defaultValue?: string }) {
+    return (
+        <label className="grid gap-2 text-sm font-medium text-slate-700">
+            <span>{label}</span>
+            <input
+                type="date"
+                name={name}
+                defaultValue={defaultValue}
+                className="w-full min-w-0 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none focus:border-teal-400"
             />
         </label>
     );
