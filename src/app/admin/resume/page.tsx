@@ -9,7 +9,7 @@ export const metadata = createPageMetadata({
     path: "/admin/resume",
 });
 
-export default function AdminResumePage() {
+export default async function AdminResumePage() {
     return (
         <div className="pb-16 pt-8 lg:pt-10">
             <ShellContainer className="space-y-6">

@@ -3,8 +3,8 @@ import { getResumeConfig, updateResumeConfig } from "@/lib/resume-config";
 import { ShellContainer } from "@/components/site-shell";
 import { redirect } from "next/navigation";
 
-export default function AdminResumeEditPage() {
-    const config = getResumeConfig();
+export default async function AdminResumeEditPage() {
+    const config = await getResumeConfig();
 
     async function saveConfig(formData: FormData) {
         "use server";
@@ -17,7 +17,7 @@ export default function AdminResumeEditPage() {
         const pointsString = formData.get("points") as string;
         const points = pointsString.split("\n").map(p => p.trim()).filter(p => p.length > 0);
 
-        updateResumeConfig({
+        await updateResumeConfig({
             heading,
             serviceName,
             price,

@@ -9,8 +9,8 @@ export const metadata = createPageMetadata({
     path: "/resume",
 });
 
-export default function ResumePage() {
-    const config = getResumeConfig();
+export default async function ResumePage() {
+    const config = await getResumeConfig();
 
     return (
         <div className="pb-16 pt-8 lg:pt-10">
