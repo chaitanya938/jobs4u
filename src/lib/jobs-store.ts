@@ -165,6 +165,7 @@ function mapJobRow(row: JobRow): Job {
         slug: row.slug,
         title: row.title,
         companySlug: row.company?.slug ?? "company",
+        companyName: row.company?.name ?? undefined,
         companyLogoUrl: row.company?.logo_url ?? undefined,
         location: row.location,
         experience: row.experience,

@@ -2,7 +2,17 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { footerSections, navLinks, adminNavLinks } from "@/lib/site-data";
+import { ArrowRight, BriefcaseBusiness, FileText, GraduationCap, Laptop, MessageCircle, UsersRound } from "lucide-react";
+import { adminNavLinks, navLinks } from "@/lib/site-data";
+
+const publicNavigation = [
+    { href: "/fresher-jobs", description: "Start your career", icon: <GraduationCap aria-hidden="true" /> },
+    { href: "/remote-jobs", description: "Work from anywhere", icon: <Laptop aria-hidden="true" /> },
+    { href: "/experienced-jobs", description: "For professionals", icon: <BriefcaseBusiness aria-hidden="true" /> },
+    { href: "/resume", description: "Build a better resume", icon: <FileText aria-hidden="true" /> },
+    { href: "/referrals", description: "Get referred easily", icon: <UsersRound aria-hidden="true" /> },
+    { href: "/interview", description: "Prepare with confidence", icon: <MessageCircle aria-hidden="true" /> },
+];
 
 export function ShellContainer({ children, className = "" }: { children: React.ReactNode; className?: string }) {
     return <div className={`jobs4u-shell ${className}`}>{children}</div>;
@@ -10,24 +20,60 @@ export function ShellContainer({ children, className = "" }: { children: React.R
 
 export function SiteHeader() {
     const pathname = usePathname();
+    const isAdmin = pathname.startsWith("/admin");
 
     return (
-        <header className="sticky top-0 z-50 border-b border-black bg-white">
+        <header className="site-header sticky top-0 z-50">
             <ShellContainer>
-                <div className="flex flex-col sm:flex-row flex-wrap items-center sm:justify-between py-3 gap-y-4 sm:gap-4 lg:h-20 lg:py-0">
-                    <Link href="/fresher-jobs" className="jobs4u-focus jobs4u-heading flex items-center gap-3 text-lg font-bold text-black shrink-0">
-                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl text-sm font-bold text-white" style={{ background: "linear-gradient(135deg, #f97316 0%, #ec4899 100%)", border: "none" }}>J4</span>
-                        <span>Jobs4U</span>
+                <div className="site-header-inner">
+                    <Link href="/fresher-jobs" className="jobs4u-focus site-brand">
+                        <span className="site-brand-mark">J4</span>
+                        <span className="site-brand-copy">
+                            <span className="site-brand-name">Jobs4<span>U</span></span>
+                            <span className="site-brand-tagline">Jobs · Referrals · Career Growth</span>
+                        </span>
                     </Link>
 
-                    <nav className="flex w-full flex-wrap items-center justify-center gap-2 sm:w-auto sm:justify-end lg:ml-8 lg:justify-start lg:gap-1">
-                        {(pathname.startsWith("/admin") ? adminNavLinks : navLinks).map((link) => (
-                            <Link key={link.href} href={link.href} className={`jobs4u-focus rounded-3xl sm:rounded-full px-3 py-2 sm:px-4 sm:py-2 text-[11px] sm:text-sm font-semibold transition shadow-sm text-center leading-tight whitespace-normal inline-flex items-center justify-center max-w-[110px] sm:max-w-none ${pathname === link.href ? "border border-transparent bg-green-600 text-white" : "border border-transparent text-slate-900 hover:opacity-90 hover:scale-105"}`} style={pathname === link.href ? {} : { background: "linear-gradient(135deg, #fdba74 0%, #f9a8d4 100%)" }}>
-                                {link.label}
-                            </Link>
-                        ))}
-                    </nav>
+                    <span className="site-header-note" aria-hidden="true">
+                        <span>Better Jobs</span>
+                        <span>Brighter Future</span>
+                    </span>
+
+                    {isAdmin ? (
+                        <nav className="admin-header-nav" aria-label="Admin navigation">
+                            {adminNavLinks.map((link) => (
+                                <Link key={link.href} href={link.href} className={`jobs4u-focus admin-header-link${pathname === link.href ? " is-active" : ""}`}>
+                                    {link.label}
+                                </Link>
+                            ))}
+                        </nav>
+                    ) : null}
                 </div>
+
+                {!isAdmin ? (
+                    <nav className="home-shortcut-grid" aria-label="Main navigation">
+                        {navLinks.map((link, index) => {
+                            const item = publicNavigation[index];
+                            const isCurrent = pathname === link.href;
+
+                            return (
+                                <Link
+                                    key={link.href}
+                                    href={link.href}
+                                    className={`home-shortcut jobs4u-focus${isCurrent ? " is-current" : ""}`}
+                                    aria-current={isCurrent ? "page" : undefined}
+                                >
+                                    <span className="home-shortcut-icon">{item.icon}</span>
+                                    <span className="home-shortcut-copy">
+                                        <span className="home-shortcut-title">{link.label}</span>
+                                        <span className="home-shortcut-description">{item.description}</span>
+                                    </span>
+                                    <span className="home-shortcut-arrow"><ArrowRight aria-hidden="true" /></span>
+                                </Link>
+                            );
+                        })}
+                    </nav>
+                ) : null}
             </ShellContainer>
         </header>
     );

@@ -1,40 +1,33 @@
-import Link from "next/link";
 import { AdSlotBetweenJobs, AdSlotBottom, AdSlotInContent, AdSlotTop } from "@/components/ad-slot";
-import { CompanyCard, ContentCard, EmptyState, JobCard, QuestionCard, SectionHeading, StatCard } from "@/components/cards";
-import { ShellContainer, HeroSection } from "@/components/site-shell";
-import { companies, getLatestItems, interviewExperiences, preparationGuides, programmingQuestions, referralOpportunities, resumeResources } from "@/lib/site-data";
+import { CompanyCard, ContentCard, EmptyState, JobCard, QuestionCard, SectionHeading } from "@/components/cards";
+import { ShellContainer } from "@/components/site-shell";
+import { companies, formatDate, getLatestItems, interviewExperiences, preparationGuides, programmingQuestions, referralOpportunities, resumeResources } from "@/lib/site-data";
 import { fetchActiveJobs } from "@/lib/jobs-store";
 
 export default async function Home() {
   const activeJobs = await fetchActiveJobs();
   const latestJobs = activeJobs.slice(0, 6);
+  const latestJobDate = activeJobs[0]?.postedAt;
   const fresherJobs = activeJobs.filter((job) => job.categories.includes("Fresher") || /fresher/i.test(job.experience)).slice(0, 4);
   const remoteJobs = activeJobs.filter((job) => job.categories.includes("Remote") || job.workMode.toLowerCase().includes("remote")).slice(0, 4);
   const experiencedJobs = activeJobs.filter((job) => job.categories.includes("Experienced") || /\d/.test(job.experience)).slice(0, 4);
 
   return (
-    <div className="pb-16 pt-8 lg:pt-10">
-      <ShellContainer className="space-y-10 lg:space-y-14">
-        <HeroSection />
-
-        <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <StatCard label="Latest Jobs" value={String(latestJobs.length)} note="Active opportunities in the last few days" />
-          <StatCard label="Resources" value={String(resumeResources.length + preparationGuides.length)} note="Resume and preparation content" />
-          <StatCard label="Interview Posts" value={String(interviewExperiences.length)} note="Original interview experiences" />
-          <StatCard label="Companies" value={String(companies.length)} note="Company pages and hiring processes" />
-        </section>
-
+    <div className="pb-16 pt-2 sm:pt-3">
+      <ShellContainer className="home-shell space-y-4 lg:space-y-8">
         <AdSlotTop />
 
-        <section className="space-y-6">
+        <section className="space-y-4">
           <SectionHeading
-            eyebrow="Latest Jobs"
-            title="Newest opportunities first"
-            description="Sorts active jobs by recency and keeps expired opportunities out of the live listings."
+            level={1}
+            title={<>Latest Job <span className="section-title-accent">Opportunities</span></>}
+            description="Handpicked jobs for freshers and professionals"
             action={
-              <Link href="/fresher-jobs" className="jobs4u-focus rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700">
-                View Fresher Jobs
-              </Link>
+              <div className="home-update-pill" aria-label="Current job listing information">
+                <span className="home-update-dot" />
+                <span>{activeJobs.length} active {activeJobs.length === 1 ? "job" : "jobs"}</span>
+                {latestJobDate ? <><span className="home-update-divider" /> <time dateTime={latestJobDate}>Updated {formatDate(latestJobDate)}</time></> : null}
+              </div>
             }
           />
           {latestJobs.length ? (

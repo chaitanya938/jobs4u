@@ -14,6 +14,7 @@ export type Job = {
     slug: string;
     title: string;
     companySlug: string;
+    companyName?: string;
     companyLogoUrl?: string;
     location: string;
     experience: string;
