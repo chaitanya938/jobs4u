@@ -1,7 +1,8 @@
 import { ArrowRight, CalendarDays, Gift, MessageCircle, UsersRound } from "lucide-react";
 import { ShellContainer } from "@/components/site-shell";
 import { createPageMetadata } from "@/lib/seo";
-import { getReferralConfig } from "@/lib/referral-config";
+
+const whatsappChannelUrl = "https://whatsapp.com/channel/0029VbDoIia2f3EOFpo1Zm3t";
 
 export const metadata = createPageMetadata({
     title: "Daily Job Referrals",
@@ -10,11 +11,6 @@ export const metadata = createPageMetadata({
 });
 
 export default function ReferralsPage() {
-    const { phoneNumber } = getReferralConfig();
-    const message = encodeURIComponent(
-        "Hi Jobs4U, I want to join the 2-month referral membership for ₹999. Please share payment details and the Telegram group and updates-channel links.",
-    );
-
     return (
         <div className="bg-[#f8f9fc] py-8 sm:py-12">
             <ShellContainer>
@@ -24,7 +20,7 @@ export default function ReferralsPage() {
                         Get daily job referrals
                     </h1>
                     <p className="mt-3 max-w-2xl text-base leading-7 text-slate-600">
-                        Join our Telegram group for two months of referral updates and opportunities shared every day.
+                        Join our WhatsApp channel for two months of referral updates and opportunities shared every day.
                     </p>
 
                     <div className="mt-7 grid gap-6 border-y border-slate-100 py-6 sm:grid-cols-3 sm:gap-5">
@@ -48,19 +44,19 @@ export default function ReferralsPage() {
                             <p className="jobs4u-heading mt-1 text-3xl font-bold text-slate-900">₹999 <span className="text-base font-medium text-slate-500">/ 2 months</span></p>
                         </div>
                         <a
-                            href={`https://wa.me/${phoneNumber}?text=${message}`}
+                            href={whatsappChannelUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="jobs4u-focus inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-violet-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-800"
                         >
                             <MessageCircle className="h-4 w-4" aria-hidden="true" />
-                            Request access on WhatsApp
+                            Join WhatsApp Channel
                             <ArrowRight className="h-4 w-4" aria-hidden="true" />
                         </a>
                     </div>
 
                     <p className="mt-5 text-xs leading-5 text-slate-500">
-                        The button opens a WhatsApp chat to request payment details and the group invite. Referrals do not guarantee a job; hiring decisions are made by employers.
+                        The button opens the WhatsApp channel directly. Referrals do not guarantee a job; hiring decisions are made by employers.
                     </p>
                 </section>
             </ShellContainer>
