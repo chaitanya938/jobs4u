@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowRight, BriefcaseBusiness, FileText, GraduationCap, Laptop, MessageCircle, UsersRound } from "lucide-react";
+import { ArrowRight, BriefcaseBusiness, FileText, GraduationCap, Laptop, MessageCircle, Sparkles, UsersRound } from "lucide-react";
 import { adminNavLinks, navLinks } from "@/lib/site-data";
 
 const publicNavigation = [
@@ -23,7 +23,7 @@ export function SiteHeader() {
     const isAdmin = pathname.startsWith("/admin");
 
     return (
-        <header className="site-header sticky top-0 z-50">
+        <header className="site-header">
             <ShellContainer>
                 <div className="site-header-inner">
                     <Link href="/fresher-jobs" className="jobs4u-focus site-brand">
@@ -72,6 +72,8 @@ export function SiteHeader() {
                                 </Link>
                             );
                         })}
+                        <Sparkles className="home-nav-sparkle home-nav-sparkle-one" aria-hidden="true" />
+                        <Sparkles className="home-nav-sparkle home-nav-sparkle-two" aria-hidden="true" />
                     </nav>
                 ) : null}
             </ShellContainer>
